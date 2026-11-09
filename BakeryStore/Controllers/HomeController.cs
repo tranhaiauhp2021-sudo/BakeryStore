@@ -1,0 +1,36 @@
+﻿using System;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
+using BakeryStore.Models;
+namespace BakeryStore.Controllers {
+ public class HomeController:Controller {
+  private readonly MyStoreContext db=new MyStoreContext();
+  public ActionResult Index(string search,int page=1){
+   page=Math.Max(page,1);
+   var query=db.Products.Include(x=>x.Category).AsQueryable();
+   if(!string.IsNullOrWhiteSpace(search)){search=search.Trim();query=query.Where(x=>x.ProductName.Contains(search)||x.ProductDecription.Contains(search)||x.Category.CategoryName.Contains(search));}
+   int total=query.Count(); const int perPage=8;
+   var vm=new HomeVM{Search=search,Page=page,TotalPages=Math.Max(1,(total+perPage-1)/perPage),Categories=db.Categories.OrderBy(c=>c.CategoryID).ToList(),Products=query.OrderByDescending(p=>p.ProductID).Skip((page-1)*perPage).Take(perPage).ToList(),Featured=db.Products.OrderByDescending(p=>p.OrderDetails.Sum(d=>(int?)d.Quantity)??0).ThenByDescending(p=>p.ProductID).Take(8).ToList()};
+   return View(vm);
+  }
+  public ActionResult ProductList(int? id,string search,string sort="new",int page=1){
+   page=Math.Max(page,1);var query=db.Products.Include(x=>x.Category).AsQueryable();
+   if(id.HasValue)query=query.Where(p=>p.CategoryID==id.Value);
+   if(!string.IsNullOrWhiteSpace(search)){search=search.Trim();query=query.Where(p=>p.ProductName.Contains(search)||p.ProductDecription.Contains(search));}
+   switch(sort){case "price_asc":query=query.OrderBy(p=>p.ProductPrice);break;case "price_desc":query=query.OrderByDescending(p=>p.ProductPrice);break;case "name":query=query.OrderBy(p=>p.ProductName);break;default:sort="new";query=query.OrderByDescending(p=>p.ProductID);break;}
+   int total=query.Count(); const int perPage=8;
+   var vm=new CatalogVM{CategoryId=id,Search=search,Sort=sort,Page=page,TotalPages=Math.Max(1,(total+perPage-1)/perPage),Products=query.Skip((page-1)*perPage).Take(perPage).ToList(),Categories=db.Categories.OrderBy(c=>c.CategoryID).ToList()};
+   vm.CategoryName=id.HasValue?vm.Categories.Where(x=>x.CategoryID==id).Select(x=>x.CategoryName).FirstOrDefault():"Tất cả bánh";
+   return View(vm);
+  }
+  public ActionResult ProductDetail(int id){
+   var product=db.Products.Include(x=>x.Category).FirstOrDefault(p=>p.ProductID==id);
+   if(product==null)return HttpNotFound();
+   var vm=new ProductDetailVM{Product=product,Related=db.Products.Where(p=>p.CategoryID==product.CategoryID&&p.ProductID!=id).OrderByDescending(p=>p.ProductID).Take(4).ToList(),Top=db.Products.OrderByDescending(p=>p.OrderDetails.Sum(d=>(int?)d.Quantity)??0).Take(4).ToList()};
+   return View(vm);
+  }
+  [ChildActionOnly] public ActionResult CategoryMenu(){return PartialView("_CategoryMenu", db.Categories.OrderBy(c=>c.CategoryID).ToList());}
+  protected override void Dispose(bool disposing){if(disposing)db.Dispose();base.Dispose(disposing);}
+ }
+}

@@ -1,0 +1,85 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+
+namespace BakeryStore.Models {
+ [Table("User")]
+ public class UserAccount {
+  [Key, StringLength(255)] public string Username {get;set;}
+  [Required, StringLength(255)] public string Password {get;set;}
+  [Required, StringLength(1)] public string UserRole {get;set;}
+  public virtual ICollection<Customer> Customers {get;set;} = new List<Customer>();
+ }
+ [Table("Customer")]
+ public class Customer {
+  [Key] public int CustomerID {get;set;}
+  [Required] public string CustomerName {get;set;}
+  [Required, StringLength(15)] public string CustomerPhone {get;set;}
+  public string CustomerEmail {get;set;}
+  public string CustomerAddress {get;set;}
+  [Required, StringLength(255)] public string Username {get;set;}
+  [ForeignKey("Username")] public virtual UserAccount User {get;set;}
+  public virtual ICollection<Order> Orders {get;set;} = new List<Order>();
+ }
+ [Table("Category")]
+ public class Category {
+  [Key] public int CategoryID {get;set;}
+  [Required] public string CategoryName {get;set;}
+  public virtual ICollection<Product> Products {get;set;} = new List<Product>();
+ }
+ [Table("Product")]
+ public class Product {
+  [Key] public int ProductID {get;set;}
+  [Required] public int CategoryID {get;set;}
+  [Required] public string ProductName {get;set;}
+  [Required] public string ProductDecription {get;set;} // Tên cột theo file database2024.txt
+  [Column(TypeName="decimal")] public decimal ProductPrice {get;set;}
+  public string ProductImage {get;set;}
+  [ForeignKey("CategoryID")] public virtual Category Category {get;set;}
+  public virtual ICollection<OrderDetail> OrderDetails {get;set;} = new List<OrderDetail>();
+ }
+ [Table("Order")]
+ public class Order {
+  [Key] public int OrderID {get;set;}
+  [Required] public int CustomerID {get;set;}
+  [Column(TypeName="date")] public DateTime OrderDate {get;set;}
+  [Column(TypeName="decimal")] public decimal TotalAmount {get;set;}
+  public string PaymentStatus {get;set;}
+  [Required] public string AddressDelivery {get;set;}
+  [ForeignKey("CustomerID")] public virtual Customer Customer {get;set;}
+  public virtual ICollection<OrderDetail> OrderDetails {get;set;} = new List<OrderDetail>();
+ }
+ [Table("OrderDetail")]
+ public class OrderDetail {
+  [Key] public int ID {get;set;}
+  public int ProductID {get;set;}
+  public int OrderID {get;set;}
+  public int Quantity {get;set;}
+  [Column(TypeName="decimal")] public decimal UnitPrice {get;set;}
+  [ForeignKey("ProductID")] public virtual Product Product {get;set;}
+  [ForeignKey("OrderID")] public virtual Order Order {get;set;}
+ }
+ public class MyStoreContext : DbContext {
+  public MyStoreContext():base("name=MyStoreDb"){}
+  public DbSet<UserAccount> Users {get;set;}
+  public DbSet<Customer> Customers {get;set;}
+  public DbSet<Category> Categories {get;set;}
+  public DbSet<Product> Products {get;set;}
+  public DbSet<Order> Orders {get;set;}
+  public DbSet<OrderDetail> OrderDetails {get;set;}
+  protected override void OnModelCreating(DbModelBuilder builder) {
+   builder.Entity<UserAccount>().Property(x=>x.UserRole).IsFixedLength().IsUnicode().HasMaxLength(1);
+   builder.Entity<Product>().Property(x=>x.ProductPrice).HasPrecision(18,2);
+   builder.Entity<Order>().Property(x=>x.TotalAmount).HasPrecision(18,2);
+   builder.Entity<OrderDetail>().Property(x=>x.UnitPrice).HasPrecision(18,2);
+   builder.Entity<UserAccount>().HasMany(x=>x.Customers).WithRequired(x=>x.User).HasForeignKey(x=>x.Username).WillCascadeOnDelete(false);
+   builder.Entity<Category>().HasMany(x=>x.Products).WithRequired(x=>x.Category).HasForeignKey(x=>x.CategoryID).WillCascadeOnDelete(false);
+   builder.Entity<Customer>().HasMany(x=>x.Orders).WithRequired(x=>x.Customer).HasForeignKey(x=>x.CustomerID).WillCascadeOnDelete(false);
+   builder.Entity<Order>().HasMany(x=>x.OrderDetails).WithRequired(x=>x.Order).HasForeignKey(x=>x.OrderID).WillCascadeOnDelete(false);
+   builder.Entity<Product>().HasMany(x=>x.OrderDetails).WithRequired(x=>x.Product).HasForeignKey(x=>x.ProductID).WillCascadeOnDelete(false);
+   base.OnModelCreating(builder);
+  }
+ }
+}

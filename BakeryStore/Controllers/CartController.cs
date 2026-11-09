@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using BakeryStore.Models;
+namespace BakeryStore.Controllers {
+ public class CartController:Controller {
+  private readonly MyStoreContext db=new MyStoreContext();
+  public static List<CartItem> GetCart(System.Web.HttpSessionStateBase session){
+   var items=session["Cart"] as List<CartItem>;if(items==null){items=new List<CartItem>();session["Cart"]=items;}return items;
+  }
+  public ActionResult Index(){return View(new CartVM{Items=GetCart(Session)});}
+  [HttpPost,ValidateAntiForgeryToken] public ActionResult Add(int productId,int quantity=1){
+   var p=db.Products.Find(productId);if(p==null)return HttpNotFound();
+   var cart=GetCart(Session);var item=cart.FirstOrDefault(x=>x.ProductID==productId);quantity=Math.Min(99,Math.Max(1,quantity));
+   if(item==null)cart.Add(new CartItem{ProductID=p.ProductID,ProductName=p.ProductName,ProductPrice=p.ProductPrice,ProductImage=p.ProductImage,Quantity=quantity});
+   else item.Quantity=Math.Min(99,item.Quantity+quantity);
+   TempData["Success"]="Đã thêm bánh vào giỏ hàng!";return RedirectToAction("Index");
+  }
+  [HttpPost,ValidateAntiForgeryToken] public ActionResult Update(int productId,int quantity){
+   var item=GetCart(Session).FirstOrDefault(x=>x.ProductID==productId);if(item!=null){if(quantity<=0)GetCart(Session).Remove(item);else item.Quantity=Math.Min(quantity,99);}return RedirectToAction("Index");
+  }
+  [HttpPost,ValidateAntiForgeryToken] public ActionResult Remove(int productId){var item=GetCart(Session).FirstOrDefault(x=>x.ProductID==productId);if(item!=null)GetCart(Session).Remove(item);return RedirectToAction("Index");}
+  [ChildActionOnly] public ActionResult Count(){return Content(GetCart(Session).Sum(i=>i.Quantity).ToString());}
+  protected override void Dispose(bool disposing){if(disposing)db.Dispose();base.Dispose(disposing);}
+ }
+}

@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "category": "Bánh kem",
+    "name": "Strawberry Dream Cake",
+    "description": "Bánh kem dâu tây mềm mịn với lớp whipping cream tươi và dâu mọng.",
+    "price": 320000,
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=850&q=80"
+  },
+  {
+    "id": 2,
+    "category": "Bánh mì & Croissant",
+    "name": "Butter Croissant",
+    "description": "Croissant bơ Pháp thơm lừng, vỏ giòn nhiều lớp và ruột mềm xốp.",
+    "price": 49000,
+    "image": "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=850&q=80"
+  },
+  {
+    "id": 3,
+    "category": "Cookies",
+    "name": "Chocolate Chip Cookies",
+    "description": "Bánh quy chocolate chip thơm bơ, giòn cạnh và mềm bên trong.",
+    "price": 45000,
+    "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=850&q=80"
+  },
+  {
+    "id": 4,
+    "category": "Cupcake",
+    "name": "Vanilla Cloud Cupcake",
+    "description": "Cupcake vani với lớp kem ngọt dịu và trang trí dễ thương.",
+    "price": 58000,
+    "image": "https://images.unsplash.com/photo-1559622214-f8a9850965bb?w=850&q=80"
+  },
+  {
+    "id": 5,
+    "category": "Bánh mì & Croissant",
+    "name": "Artisan Sourdough",
+    "description": "Bánh mì sourdough lên men tự nhiên, vỏ giòn ruột dẻo.",
+    "price": 85000,
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=850&q=80"
+  },
+  {
+    "id": 6,
+    "category": "Bánh kem",
+    "name": "Tiramisu Classic",
+    "description": "Tiramisu chuẩn vị với mascarpone, cà phê và chút bột cacao.",
+    "price": 79000,
+    "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=850&q=80"
+  },
+  {
+    "id": 7,
+    "category": "Cupcake",
+    "name": "Red Velvet Cupcake",
+    "description": "Cupcake red velvet mềm mượt cùng kem phô mai thơm béo.",
+    "price": 65000,
+    "image": "https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=850&q=80"
+  },
+  {
+    "id": 8,
+    "category": "Tart & Pastry",
+    "name": "Lemon Tart",
+    "description": "Tart chanh vàng chua ngọt hài hòa trên đế bánh giòn.",
+    "price": 69000,
+    "image": "https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?w=850&q=80"
+  },
+  {
+    "id": 9,
+    "category": "Bánh kem",
+    "name": "Berry Cheesecake",
+    "description": "Cheesecake phô mai tươi với sốt berries chua ngọt.",
+    "price": 89000,
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=850&q=80"
+  },
+  {
+    "id": 10,
+    "category": "Bánh kem",
+    "name": "Chocolate Fudge Cake",
+    "description": "Bánh chocolate đậm đà với lớp ganache sánh mịn.",
+    "price": 115000,
+    "image": "https://images.unsplash.com/photo-1587668178277-295251f900ce?w=850&q=80"
+  },
+  {
+    "id": 11,
+    "category": "Tart & Pastry",
+    "name": "Mini Fruit Tart",
+    "description": "Bánh tart mini trái cây tươi đủ sắc màu.",
+    "price": 62000,
+    "image": "https://images.unsplash.com/photo-1623334044303-241021148842?w=850&q=80"
+  },
+  {
+    "id": 12,
+    "category": "Cookies",
+    "name": "Almond Butter Cookies",
+    "description": "Bánh quy bơ hạnh nhân giòn tan, thơm dịu và vừa miệng.",
+    "price": 52000,
+    "image": "https://images.unsplash.com/photo-1519869325930-281384150729?w=850&q=80"
+  }
+]

@@ -1,0 +1,2 @@
+﻿@model IEnumerable<BakeryStore.Models.Category>
+@foreach(var c in Model) { <a href="@Url.Action("ProductList","Home",new{id=c.CategoryID,area=""})">@c.CategoryName</a> }

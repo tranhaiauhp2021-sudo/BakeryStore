@@ -1,0 +1,9 @@
+﻿@model BakeryStore.Models.LoginVM
+@{ViewBag.Title="Đăng nhập";}
+<section class="page-banner compact"><div class="container"><h1>Đăng nhập</h1></div></section>
+<section class="section"><div class="container auth-container"><div class="auth-card"><span class="eyebrow dark">WELCOME BACK</span><h2>Nhớ bạn quá ♡</h2><p>Đăng nhập để tiếp tục khám phá những món bánh yêu thích.</p>
+@using(Html.BeginForm("Login","Account",FormMethod.Post)){@Html.AntiForgeryToken()@Html.HiddenFor(m=>m.ReturnUrl)@Html.ValidationSummary(false,"",new{@class="validation"})
+<label>Tên đăng nhập</label>@Html.TextBoxFor(m=>m.Username,new{@class="field",autocomplete="username"})
+<label>Mật khẩu</label>@Html.PasswordFor(m=>m.Password,new{@class="field",autocomplete="current-password"})
+<button class="btn btn-primary full" type="submit">Đăng nhập <i class="fas fa-arrow-right"></i></button>}
+<p class="auth-switch">Chưa có tài khoản? <a href="@Url.Action("Register")">Đăng ký ngay</a></p></div></div></section>

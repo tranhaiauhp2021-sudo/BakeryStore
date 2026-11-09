@@ -1,0 +1,42 @@
+﻿@using BakeryStore.Models
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+ <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+ <title>@ViewBag.Title · Bakery Store</title>
+ <meta name="description" content="Bakery Store - Bánh tươi mỗi ngày, trao ngọt ngào cho mọi khoảnh khắc."/>
+ <link rel="preconnect" href="https://fonts.googleapis.com"/>
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+ <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+ <link href="@Url.Content("~/Content/site.css")" rel="stylesheet" />
+</head>
+<body>
+ <div class="topbar"><span><i class="fas fa-truck"></i> Miễn phí giao hàng cho đơn từ 299.000đ</span><span class="topbar-right"><i class="fas fa-phone-alt"></i> Hotline: 0900 123 456</span></div>
+ <header class="site-header"><div class="container header-main">
+  <a class="brand" href="@Url.Action("Index","Home",new{area=""})"><span class="brand-mark"><i class="fas fa-birthday-cake"></i></span><span class="brand-text">bakery<span class="brand-dot">.</span><small>FRESHLY BAKED WITH LOVE</small></span></a>
+  <button class="mobile-menu-toggle" aria-label="Mở menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
+  <nav class="nav-links" id="mainNav">
+   <a href="@Url.Action("Index","Home",new{area=""})">Trang chủ</a>
+   <a href="@Url.Action("ProductList","Home",new{area=""})">Cửa hàng</a>
+   <div class="dropdown"><a href="@Url.Action("ProductList","Home",new{area=""})">Danh mục <i class="fas fa-chevron-down tiny"></i></a><div class="dropdown-menu">@Html.Action("CategoryMenu","Home",new{area=""})</div></div>
+   <a href="@Url.Action("Index","Home",new{area=""})#our-story">Về chúng tôi</a>
+  </nav>
+  <div class="header-actions">
+   <a class="icon-btn" href="@Url.Action("ProductList","Home",new{area=""})" aria-label="Tìm kiếm"><i class="fas fa-search"></i></a>
+   @if(Session["Username"]==null){<a class="icon-btn" href="@Url.Action("Login","Account",new{area=""})" title="Đăng nhập"><i class="far fa-user"></i></a>}
+   else {<div class="dropdown account-menu"><a class="icon-btn" href="@Url.Action("Edit","Account",new{area=""})" title="Tài khoản"><i class="far fa-user"></i></a><div class="dropdown-menu account-popup"><span class="dropdown-greeting">Xin chào, @Session["Username"]</span><a href="@Url.Action("Edit","Account",new{area=""})">Thông tin cá nhân</a><a href="@Url.Action("OrderHistory","Order",new{area=""})">Lịch sử đơn hàng</a>@if((Session["UserRole"] as string)=="A"){<a href="@Url.Action("Index","Home",new{area="Admin"})">Quản trị</a>}@using(Html.BeginForm("Logout","Account",FormMethod.Post)){@Html.AntiForgeryToken()<button class="text-button" type="submit">Đăng xuất</button>}</div></div>}
+   <a class="icon-btn cart-link" href="@Url.Action("Index","Cart",new{area=""})" title="Giỏ hàng"><i class="fas fa-shopping-bag"></i><span class="cart-badge">@Html.Action("Count","Cart",new{area=""})</span></a>
+  </div>
+ </div></header>
+ @if(TempData["Success"]!=null){<div class="container"><div class="flash success">@TempData["Success"]</div></div>}
+ @if(TempData["Error"]!=null){<div class="container"><div class="flash error">@TempData["Error"]</div></div>}
+ <main>@RenderBody()</main>
+ <footer class="footer"><div class="container footer-grid">
+  <div><div class="footer-brand">bakery<span>.</span></div><p>Bánh tươi mỗi ngày, gửi trọn yêu thương trong từng chiếc bánh nhỏ.</p><div class="social"><i class="fab fa-facebook-f"></i><i class="fab fa-instagram"></i><i class="fab fa-tiktok"></i></div></div>
+  <div><h4>Khám phá</h4><a href="@Url.Action("Index","Home",new{area=""})">Trang chủ</a><a href="@Url.Action("ProductList","Home",new{area=""})">Tất cả sản phẩm</a><a href="@Url.Action("Index","Home",new{area=""})#our-story">Câu chuyện của chúng tôi</a></div>
+  <div><h4>Hỗ trợ</h4><a href="@Url.Action("Index","Cart",new{area=""})">Giỏ hàng</a><a href="@Url.Action("OrderHistory","Order",new{area=""})">Tra cứu đơn hàng</a><a href="@Url.Action("Login","Account",new{area=""})">Tài khoản</a></div>
+  <div><h4>Nhận tin ngọt ngào</h4><p>Những món bánh mới và ưu đãi đặc biệt đang chờ bạn.</p><div class="newsletter"><input placeholder="Email của bạn" aria-label="Email"/><button type="button" onclick="alert('Cảm ơn bạn! Đây là form minh họa.')"><i class="fas fa-arrow-right"></i></button></div></div>
+ </div><div class="container footer-bottom"><span>© @DateTime.Now.Year Bakery Store — Made with love ♡</span><span>Đồ án Lập trình Web · 12-Bakery Store</span></div></footer>
+ <script src="@Url.Content("~/Scripts/site.js")"></script>
+</body></html>

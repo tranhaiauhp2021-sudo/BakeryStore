@@ -1,0 +1,3 @@
+@model BakeryStore.Models.Product
+@{ViewBag.Title="Thêm bánh";}
+<div class="page-head"><h1>Thêm sản phẩm mới</h1></div><div class="panel form-panel">@using(Html.BeginForm("Create","Products",FormMethod.Post,new{enctype="multipart/form-data"})){@Html.AntiForgeryToken()@Html.Partial("_Form",Model)}</div>

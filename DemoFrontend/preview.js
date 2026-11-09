@@ -1,0 +1,25 @@
+const goods=JSON.parse(document.getElementById('productData').textContent);
+let cart;try{cart=JSON.parse(localStorage.getItem('bakery_demo_cart')||'{}')}catch(e){cart={}}
+let current='Tất cả',query='';const vn=x=>Number(x).toLocaleString('vi-VN')+'₫';
+const escapeText=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function card(p){return `<div class="product-card"><a class="product-photo" href="#products" onclick="showProduct(${p.id});return false;"><img src="${p.image}" onerror="this.onerror=null;this.src='images/placeholder.svg'" loading="lazy" alt="${escapeText(p.name)}"/><span class="product-tag">FRESH</span><button class="fav-icon" onclick="event.preventDefault();event.stopPropagation();this.classList.toggle('active');toast('Đã cập nhật danh sách yêu thích ♡')" title="Yêu thích"><i class="far fa-heart"></i></button></a><div class="product-info"><div class="product-category">${escapeText(p.category)}</div><a class="product-title" href="#products" onclick="showProduct(${p.id});return false;">${escapeText(p.name)}</a><div class="product-bottom"><span class="price">${vn(p.price)}</span><button type="button" class="add-cart" onclick="addToCart(${p.id})" title="Thêm vào giỏ"><i class="fas fa-plus"></i></button></div></div></div>`}
+function render(){let a=goods.filter(p=>(current==='Tất cả'||p.category===current)&&(p.name.toLocaleLowerCase().includes(query)||p.description.toLocaleLowerCase().includes(query)));document.getElementById('productGrid').innerHTML=a.map(card).join('');document.getElementById('emptyResult').hidden=!!a.length;document.getElementById('featuredGrid').innerHTML=goods.slice(0,4).map(card).join('');document.querySelectorAll('[data-cat]').forEach(el=>el.classList.toggle('active',el.dataset.cat===current));}
+function save(){localStorage.setItem('bakery_demo_cart',JSON.stringify(cart));renderCart()}
+function addToCart(id){cart[id]=(cart[id]||0)+1;save();toast('Đã thêm bánh vào giỏ hàng! ♡')}
+function changeCart(id,n){cart[id]=Math.max(0,(cart[id]||0)+n);if(!cart[id])delete cart[id];save()}
+function renderCart(){const items=Object.keys(cart).map(x=>goods.find(p=>p.id===Number(x))).filter(Boolean);const count=Object.values(cart).reduce((a,b)=>a+b,0);document.getElementById('cartCount').textContent=count;document.getElementById('cartTotal').textContent=vn(items.reduce((sum,p)=>sum+p.price*cart[p.id],0));document.getElementById('cartItems').innerHTML=items.length?items.map(p=>`<div class="demo-cart-item"><img src="${p.image}" onerror="this.onerror=null;this.src='images/placeholder.svg'"/><div><strong>${escapeText(p.name)}</strong><small>${vn(p.price)}</small><div class="quantity-demo"><button onclick="changeCart(${p.id},-1)">−</button> &nbsp; ${cart[p.id]} &nbsp; <button onclick="changeCart(${p.id},1)">+</button></div></div><b>${vn(p.price*cart[p.id])}</b></div>`).join(''):'<div class="empty-cart"><i class="fas fa-shopping-basket"></i><h2>Giỏ hàng trống</h2><p>Thêm chút ngọt ngào nhé!</p></div>'}
+function toggleCart(on){document.getElementById('cartPanel').classList.toggle('open',on);document.getElementById('shade').classList.toggle('open',on)}
+function toast(msg){let el=document.getElementById('toastDemo');el.textContent=msg;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2500)}
+function showProduct(id){let p=goods.find(x=>x.id===id);if(p)toast(p.name+' · '+vn(p.price)+' · '+p.description)}
+function setFilter(f){current=f;query='';document.getElementById('searchInput').value='';render();document.querySelector('#products').scrollIntoView({behavior:'smooth'})}
+document.querySelectorAll('[data-filter]').forEach(el=>el.addEventListener('click',()=>setFilter(el.dataset.filter)));
+document.querySelectorAll('[data-cat]').forEach(el=>el.addEventListener('click',()=>setFilter(el.dataset.cat)));
+document.getElementById('searchForm').addEventListener('submit',e=>{e.preventDefault();query=document.getElementById('searchInput').value.trim().toLocaleLowerCase();render()});
+document.getElementById('openCart').addEventListener('click',e=>{e.preventDefault();toggleCart(true)});
+document.getElementById('closeCart').addEventListener('click',()=>toggleCart(false));document.getElementById('shade').addEventListener('click',()=>toggleCart(false));
+document.getElementById('footerCart').addEventListener('click',e=>{e.preventDefault();toggleCart(true)});
+document.getElementById('checkoutDemo').addEventListener('click',()=>toast('Đây là bản xem trước. Đặt hàng thật dùng project ASP.NET MVC5 + SQL Server.'));
+for(let id of ['accountDemo','footerAccount','footerOrders'])document.getElementById(id).addEventListener('click',e=>{e.preventDefault();toast('Đăng ký, đăng nhập & lịch sử đơn hàng có trong project MVC5.')});
+document.getElementById('subscribeBtn').addEventListener('click',()=>toast('Cảm ơn bạn! Đây là bản demo giao diện.'));
+let menu=document.querySelector('.mobile-menu-toggle'),nav=document.getElementById('mainNav');menu.addEventListener('click',()=>nav.classList.toggle('open'));
+render();renderCart();

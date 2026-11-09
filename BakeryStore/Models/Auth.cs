@@ -1,0 +1,26 @@
+﻿using System;
+using System.Security.Cryptography;
+using System.Web.Mvc;
+namespace BakeryStore.Models {
+ public static class PasswordTool {
+  public static string Hash(string password){using(var derive=new Rfc2898DeriveBytes(password, 16, 100000, HashAlgorithmName.SHA256)){
+   var salt=derive.Salt; var key=derive.GetBytes(32);
+   return "100000."+Convert.ToBase64String(salt)+"."+Convert.ToBase64String(key);
+  }}
+  public static bool Verify(string password,string stored){
+   if(string.IsNullOrWhiteSpace(stored))return false;
+   var bits=stored.Trim().Split('.'); if(bits.Length!=3)return false;
+   if(!int.TryParse(bits[0],out int iter)||iter<10000||iter>1000000)return false;
+   try {var salt=Convert.FromBase64String(bits[1]);var wanted=Convert.FromBase64String(bits[2]);using(var d=new Rfc2898DeriveBytes(password,salt,iter,HashAlgorithmName.SHA256)){
+    var actual=d.GetBytes(wanted.Length);int diff=0; for(int i=0;i<wanted.Length;i++)diff|=wanted[i]^actual[i];return diff==0;
+   }} catch(FormatException){return false;}
+  }
+ }
+ public class AdminOnlyAttribute:ActionFilterAttribute {
+  public override void OnActionExecuting(ActionExecutingContext context){
+   var session=context.HttpContext.Session;
+   if(session==null || (session["UserRole"] as string)!="A") context.Result=new RedirectResult("~/Account/Login");
+   else base.OnActionExecuting(context);
+  }
+ }
+}

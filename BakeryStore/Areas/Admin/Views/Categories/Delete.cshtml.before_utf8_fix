@@ -1,0 +1,3 @@
+@model BakeryStore.Models.Category
+@{ViewBag.Title="Xóa danh mục";}
+<div class="page-head"><h1>Xóa danh mục</h1></div><div class="panel form-panel"><p>Bạn chắc chắn muốn xóa danh mục <strong>@Model.CategoryName</strong>?</p>@using(Html.BeginForm()){ @Html.AntiForgeryToken() <button type="submit" class="btn red">Xác nhận xóa</button> <a href="@Url.Action("Index")" class="back">Hủy</a> }</div>

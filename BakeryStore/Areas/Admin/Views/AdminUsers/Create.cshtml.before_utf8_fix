@@ -1,0 +1,3 @@
+@model BakeryStore.Models.AdminUserVM
+@{ViewBag.Title="Thêm admin";}
+<div class="page-head"><h1>Tạo tài khoản quản trị</h1></div><div class="panel form-panel">@using(Html.BeginForm()){ @Html.AntiForgeryToken() @Html.ValidationSummary(false,"",new{@class="error"})<label>Tài khoản</label>@Html.TextBoxFor(m=>m.Username,new{@class="field",required="required"})<label>Mật khẩu</label>@Html.PasswordFor(m=>m.Password,new{@class="field",required="required",minlength="8"})<button type="submit" class="btn">Tạo tài khoản</button>}</div>

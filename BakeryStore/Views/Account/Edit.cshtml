@@ -1,0 +1,6 @@
+﻿@model BakeryStore.Models.Customer
+@{ViewBag.Title="Thông tin cá nhân";}
+<section class="page-banner compact"><div class="container"><h1>Thông tin tài khoản</h1></div></section>
+<section class="section"><div class="container auth-container"><div class="auth-card"><h2>Xin chào, @Model.CustomerName ♡</h2><p>Tên đăng nhập: <strong>@Model.Username</strong></p>
+@using(Html.BeginForm("Edit","Account",FormMethod.Post)){@Html.AntiForgeryToken()@Html.ValidationSummary(false,"",new{@class="validation"})<label>Họ và tên</label>@Html.TextBoxFor(m=>m.CustomerName,new{@class="field"})<label>Số điện thoại</label>@Html.TextBoxFor(m=>m.CustomerPhone,new{@class="field"})<label>Email</label>@Html.TextBoxFor(m=>m.CustomerEmail,new{@class="field"})<label>Địa chỉ</label>@Html.TextBoxFor(m=>m.CustomerAddress,new{@class="field"})<button class="btn btn-primary full" type="submit">Lưu thay đổi</button>}
+<a class="text-link" href="@Url.Action("OrderHistory","Order")">Xem lịch sử mua hàng <i class="fas fa-arrow-right"></i></a></div></div></section>

@@ -1,0 +1,310 @@
+﻿
+@model BakeryStore.Models.HomeVM
+
+@{
+    ViewBag.Title = "Bánh ngọt thủ công";
+}
+
+<!-- HERO BANNER -->
+<section class="hero">
+    <div class="hero-glow"></div>
+
+    <div class="container hero-inner">
+        <div class="hero-copy">
+            <span class="eyebrow">
+                <span class="mini-line"></span>
+                BAKED FRESH EVERY DAY
+            </span>
+
+            <h1>
+                Ngọt ngào<br />
+                trong <em>từng</em><br />
+                khoảnh khắc.
+            </h1>
+
+            <p>
+                Khám phá thế giới bánh thơm ngon,
+                được làm thủ công từ những nguyên liệu
+                chọn lọc và thật nhiều yêu thương.
+            </p>
+
+            <div class="hero-actions">
+                <a class="btn btn-primary"
+                   href="@Url.Action("ProductList", "Home")">
+                    Khám phá bánh ngon
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+
+                <a class="hero-outline" href="#our-story">
+                    <i class="fas fa-play"></i>
+                    Câu chuyện của chúng tôi
+                </a>
+            </div>
+
+            <div class="hero-proof">
+                <div class="avatars">
+                    <span>♥</span>
+                    <span>✿</span>
+                    <span>★</span>
+                </div>
+
+                <div>
+                    <strong>5.000+ khách hàng</strong>
+                    <small>đã yêu thích Bakery Store</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=1200&q=85"
+                 alt="Bánh kem tươi tại Bakery Store"
+                 onerror="this.onerror=null;this.src='/Content/images/placeholder.svg';" />
+
+            <div class="hero-sticker">
+                <strong>100%</strong>
+                <span>
+                    Homemade<br />
+                    with love ♡
+                </span>
+            </div>
+
+            <div class="floating-note">
+                Freshly baked<br />
+                <b>every morning!</b>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LỢI ÍCH CỬA HÀNG -->
+<div class="benefits">
+    <div class="container benefit-row">
+        <div>
+            <i class="fas fa-leaf"></i>
+            <span>
+                <strong>Nguyên liệu tươi ngon</strong>
+                <small>Chọn lọc kỹ càng mỗi ngày</small>
+            </span>
+        </div>
+
+        <div>
+            <i class="fas fa-cookie-bite"></i>
+            <span>
+                <strong>Nướng mới mỗi sáng</strong>
+                <small>Thơm ngon đến miếng cuối</small>
+            </span>
+        </div>
+
+        <div>
+            <i class="fas fa-truck"></i>
+            <span>
+                <strong>Giao hàng tận nơi</strong>
+                <small>Đóng gói cẩn thận, đẹp mắt</small>
+            </span>
+        </div>
+
+        <div>
+            <i class="far fa-heart"></i>
+            <span>
+                <strong>Trao gửi yêu thương</strong>
+                <small>Mỗi chiếc bánh là một niềm vui</small>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- DANH MỤC SẢN PHẨM -->
+<section class="section category-section">
+    <div class="container">
+        <div class="section-heading center">
+            <span class="eyebrow dark">
+                OUR COLLECTION
+            </span>
+
+            <h2>Chọn món bánh <em>bạn yêu</em></h2>
+            <p>Mỗi lựa chọn đều mang một hương vị riêng.</p>
+        </div>
+
+        <div class="category-grid">
+            @foreach (var c in Model.Categories.Take(5))
+            {
+                <a href="@Url.Action("ProductList", "Home", new { id = c.CategoryID })"
+                   class="category-tile">
+
+                    <span class="cat-circle">
+                        <i class="@(c.CategoryID % 5 == 1 ? "fas fa-birthday-cake" :
+                                     c.CategoryID % 5 == 2 ? "fas fa-bread-slice" :
+                                     c.CategoryID % 5 == 3 ? "fas fa-cookie-bite" :
+                                     c.CategoryID % 5 == 4 ? "fas fa-ice-cream" :
+                                     "fas fa-cheese")"></i>
+                    </span>
+
+                    <strong>@c.CategoryName</strong>
+
+                    <small>
+                        Xem bộ sưu tập
+                        <i class="fas fa-arrow-right"></i>
+                    </small>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- SẢN PHẨM NỔI BẬT -->
+<section class="section featured-section">
+    <div class="container">
+        <div class="section-heading split">
+            <div>
+                <span class="eyebrow dark">
+                    CUSTOMER'S FAVORITES
+                </span>
+
+                <h2>
+                    Món bánh <em>được yêu thích</em>
+                </h2>
+            </div>
+
+            <a class="text-link"
+               href="@Url.Action("ProductList", "Home")">
+                Xem tất cả
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="product-grid">
+            @foreach (var p in Model.Featured)
+            {
+                @Html.Partial("~/Views/Shared/_ProductCard.cshtml", p)
+            }
+        </div>
+    </div>
+</section>
+
+<!-- CÂU CHUYỆN CỬA HÀNG -->
+<section class="story-band" id="our-story">
+    <div class="container story-grid">
+
+        <div class="story-photo">
+            <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1100&q=85"
+                 alt="Bánh mì thủ công"
+                 onerror="this.onerror=null;this.src='/Content/images/placeholder.svg';" />
+        </div>
+
+        <div class="story-text">
+            <span class="eyebrow dark">
+                OUR LITTLE STORY
+            </span>
+
+            <h2>
+                Không chỉ là bánh.<br />
+                Đó là <em>tình yêu.</em>
+            </h2>
+
+            <p>
+                Chúng mình tin rằng những điều tuyệt vời nhất
+                thường bắt đầu từ những điều giản dị:
+                bột mì, bơ thơm, bàn tay tận tâm
+                và một chút ngọt ngào.
+            </p>
+
+            <p>
+                Từng mẻ bánh là một lời nhắn gửi:
+                hãy dành cho bản thân và những người thương
+                một niềm vui nho nhỏ mỗi ngày.
+            </p>
+
+            <a class="btn btn-primary"
+               href="@Url.Action("ProductList", "Home")">
+                Đặt bánh ngay
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- BÁNH MỚI RA LÒ -->
+<section class="section new-section">
+    <div class="container">
+
+        <div class="section-heading split">
+            <div>
+                <span class="eyebrow dark">
+                    FRESH FROM OUR OVEN
+                </span>
+
+                <h2>Bánh mới <em>ra lò</em></h2>
+            </div>
+
+            <!-- TÌM KIẾM SẢN PHẨM -->
+            <form class="mini-search"
+                  action="@Url.Action("Index", "Home")"
+                  method="get">
+
+                <input name="search"
+                       value="@Model.Search"
+                       placeholder="Tìm bánh yêu thích..."
+                       aria-label="Tìm kiếm bánh" />
+
+                <button type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- DANH SÁCH SẢN PHẨM -->
+        @if (Model.Products.Count == 0)
+        {
+            <p class="empty">
+                Không tìm thấy món bánh phù hợp.
+                Thử từ khóa khác nhé!
+            </p>
+        }
+        else
+        {
+            <div class="product-grid">
+                @foreach (var p in Model.Products)
+                {
+                    @Html.Partial("~/Views/Shared/_ProductCard.cshtml", p)
+                }
+            </div>
+        }
+
+        <!-- PHÂN TRANG -->
+        @if (Model.TotalPages > 1)
+        {
+            <div class="pagination">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <a class="@(Model.Page == i ? "active" : "")"
+                       href="@Url.Action("Index", new { search = Model.Search, page = i })">
+                        @i
+                    </a>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+<!-- ĐẶT BÁNH -->
+<section class="newsletter-band">
+    <div class="container">
+        <span>
+            <i class="far fa-envelope-open"></i>
+        </span>
+
+        <div>
+            <h2>Một chút ngọt ngào cho ngày của bạn</h2>
+            <p>
+                Chọn chiếc bánh bạn thích,
+                chúng mình lo phần còn lại.
+            </p>
+        </div>
+
+        <a class="btn btn-light"
+           href="@Url.Action("ProductList", "Home")">
+            Mua bánh ngay
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</section>

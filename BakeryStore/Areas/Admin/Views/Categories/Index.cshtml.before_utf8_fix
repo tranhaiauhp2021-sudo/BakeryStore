@@ -1,0 +1,4 @@
+@model IEnumerable<BakeryStore.Models.Category>
+@{ViewBag.Title="Danh mục";}
+<div class="page-head"><div><span class="mini-title">CATEGORY MANAGEMENT</span><h1>Danh mục bánh</h1><p>Quản lý các loại bánh của cửa hàng.</p></div><a class="btn" href="@Url.Action("Create")"><i class="fas fa-plus"></i> Thêm danh mục</a></div>
+<div class="panel"><form method="get" class="filter-form"><input name="search" placeholder="Tìm danh mục..."/><button type="submit">Tìm kiếm</button></form><div class="table-scroll"><table><thead><tr><th>ID</th><th>Tên danh mục</th><th>Số sản phẩm</th><th>Thao tác</th></tr></thead><tbody>@foreach(var c in Model){<tr><td>#@c.CategoryID</td><td><strong>@c.CategoryName</strong></td><td>@c.Products.Count</td><td><a href="@Url.Action("Edit",new{id=c.CategoryID})">Sửa</a> · <a class="danger" href="@Url.Action("Delete",new{id=c.CategoryID})">Xóa</a></td></tr>}</tbody></table></div></div>

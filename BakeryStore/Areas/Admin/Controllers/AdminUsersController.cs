@@ -1,0 +1,15 @@
+﻿using System.Linq;
+using System.Web.Mvc;
+using BakeryStore.Models;
+namespace BakeryStore.Areas.Admin.Controllers {
+ [AdminOnly] public class AdminUsersController:Controller {
+  readonly MyStoreContext db=new MyStoreContext();
+  public ActionResult Index(string search){var q=db.Users.Where(x=>x.UserRole=="A");if(!string.IsNullOrWhiteSpace(search))q=q.Where(x=>x.Username.Contains(search));return View(q.OrderBy(x=>x.Username).ToList());}
+  [HttpGet] public ActionResult Create(){return View(new AdminUserVM());}
+  [HttpPost,ValidateAntiForgeryToken] public ActionResult Create(AdminUserVM input){if(string.IsNullOrWhiteSpace(input.Password)||input.Password.Length<8)ModelState.AddModelError("Password","Mật khẩu tối thiểu 8 ký tự.");if(db.Users.Any(x=>x.Username==input.Username))ModelState.AddModelError("Username","Tài khoản đã có.");if(!ModelState.IsValid)return View(input);db.Users.Add(new UserAccount{Username=input.Username,Password=PasswordTool.Hash(input.Password),UserRole="A"});db.SaveChanges();return RedirectToAction("Index");}
+  [HttpGet] public ActionResult Edit(string id){var user=db.Users.FirstOrDefault(x=>x.Username==id&&x.UserRole=="A");if(user==null)return HttpNotFound();return View(new AdminUserVM{Username=user.Username});}
+  [HttpPost,ValidateAntiForgeryToken] public ActionResult Edit(AdminUserVM vm){var user=db.Users.FirstOrDefault(x=>x.Username==vm.Username&&x.UserRole=="A");if(user==null)return HttpNotFound();if(string.IsNullOrEmpty(vm.Password)||vm.Password.Length<8){ModelState.AddModelError("Password","Mật khẩu mới tối thiểu 8 ký tự.");return View(vm);}user.Password=PasswordTool.Hash(vm.Password);db.SaveChanges();return RedirectToAction("Index");}
+  [HttpPost,ValidateAntiForgeryToken] public ActionResult Delete(string id){if(id==(Session["Username"] as string)){TempData["Error"]="Không thể xóa tài khoản đang đăng nhập.";return RedirectToAction("Index");}var user=db.Users.FirstOrDefault(x=>x.Username==id&&x.UserRole=="A");if(user!=null){db.Users.Remove(user);db.SaveChanges();}return RedirectToAction("Index");}
+  protected override void Dispose(bool d){if(d)db.Dispose();base.Dispose(d);}
+ }
+}

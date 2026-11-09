@@ -1,0 +1,8 @@
+﻿@model BakeryStore.Models.Product
+@Html.ValidationSummary(false,"",new{@class="error"})
+<div class="form-two"><div><label>Tên bánh</label>@Html.TextBoxFor(m=>m.ProductName,new{@class="field",required="required"})</div><div><label>Danh mục</label>@Html.DropDownListFor(m=>m.CategoryID,(SelectList)ViewBag.Categories,"-- Chọn danh mục --",new{@class="field",required="required"})</div></div>
+<label>Mô tả</label>@Html.TextAreaFor(m=>m.ProductDecription,new{@class="field",rows="5",required="required"})
+<div class="form-two"><div><label>Giá bán (VNĐ)</label>@Html.TextBoxFor(m=>m.ProductPrice,new{@class="field",type="number",min="1000",step="1000",required="required"})</div><div><label>Ảnh sản phẩm (upload)</label><input class="field" type="file" name="photo" accept="image/png,image/jpeg,image/webp"/></div></div>
+<label>Hoặc đường dẫn ảnh (URL)</label>@Html.TextBoxFor(m=>m.ProductImage,new{@class="field",placeholder="https://..."})
+@if(!string.IsNullOrEmpty(Model.ProductImage)){<img class="form-preview" src="@Model.ProductImage" alt="Ảnh hiện tại"/>}
+<button class="btn" type="submit">Lưu sản phẩm</button><a href="@Url.Action("Index")" class="back">Hủy</a>

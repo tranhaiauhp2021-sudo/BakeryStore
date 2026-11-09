@@ -1,0 +1,3 @@
+@model BakeryStore.Models.Category
+@{ViewBag.Title="Thêm danh mục";}
+<div class="page-head"><h1>Thêm danh mục</h1></div><div class="panel form-panel">@using(Html.BeginForm()){ @Html.AntiForgeryToken() @Html.ValidationSummary(false,"",new{@class="error"}) <label>Tên danh mục</label> @Html.TextBoxFor(m=>m.CategoryName,new{@class="field",required="required"}) <button type="submit" class="btn">Lưu danh mục</button> <a class="back" href="@Url.Action("Index")">Hủy</a> }</div>

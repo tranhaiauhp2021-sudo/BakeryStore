@@ -1,0 +1,7 @@
+@model BakeryStore.Models.Product
+<div class="product-card">
+ <a class="product-photo" href="@Url.Action("ProductDetail","Home",new{id=Model.ProductID,area=""})"><img loading="lazy" src="@(string.IsNullOrWhiteSpace(Model.ProductImage)?Url.Content("~/Content/images/placeholder.svg"):Model.ProductImage)" onerror="this.onerror=null;this.src='/Content/images/placeholder.svg';" alt="@Model.ProductName"/><span class="product-tag">FRESH</span></a>
+ <div class="product-info"><div class="product-category">@(Model.Category==null?"Bánh tươi":Model.Category.CategoryName)</div><a class="product-title" href="@Url.Action("ProductDetail","Home",new{id=Model.ProductID,area=""})">@Model.ProductName</a><div class="product-bottom"><span class="price">@Model.ProductPrice.ToString("N0")₫</span>
+ @using(Html.BeginForm("Add","Cart",FormMethod.Post,new{@class="inline-cart"})){@Html.AntiForgeryToken()<input type="hidden" name="productId" value="@Model.ProductID"/><input type="hidden" name="quantity" value="1"/><button type="submit" class="add-cart" title="Thêm vào giỏ" aria-label="Thêm @Model.ProductName vào giỏ"><i class="fas fa-plus"></i></button>}
+ </div></div>
+</div>
